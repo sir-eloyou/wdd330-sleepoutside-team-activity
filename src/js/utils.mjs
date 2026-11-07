@@ -38,9 +38,3 @@ export function renderListWithTemplate(template, parentElement, list, position =
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
 
-export function countItemsFromTheCart(key) {
-  const cart = getLocalStorage(key);
-  const count = cart.length;
-  return count
-
-}

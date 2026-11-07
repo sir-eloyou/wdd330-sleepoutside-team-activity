@@ -32,7 +32,7 @@ export default class ProductList {
     }
 
     getCartItemsNumber() {
-      const products = getLocalStorage("so-cart")
+      const products = getLocalStorage("so-cart")  || []
       const counts = products.length;
 
       document.querySelector(".count-items").textContent = counts
