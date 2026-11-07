@@ -13,9 +13,29 @@ export default class ProductDetails {
 
         this.product = await this.dataSource.findProductById(this.productId);
         this.renderProductDetails()
+        this.getCartItemsNumber()
 
         document.getElementById('addToCart')
             .addEventListener('click', this.addProductToCart.bind(this));
+
+        document.getElementById("addToCart")
+            .addEventListener('click', this.countProductsFromCart.bind(this))
+
+    }
+
+    getCartItemsNumber() {
+      const products = getLocalStorage("so-cart")
+      const counts = products.length;
+
+      document.querySelector(".count-items").textContent = counts
+
+    }
+
+    countProductsFromCart() {
+        const products = getLocalStorage("so-cart")
+        const counts = products.length;
+
+        document.querySelector(".count-items").textContent = counts
 
     }
 
