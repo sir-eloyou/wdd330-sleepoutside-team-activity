@@ -123,6 +123,18 @@ button {
   text-align: center;
 }
 
+.count-items {
+  background-color: red;
+  border-radius: 40%;
+  color: white;
+  position: relative;
+  top: 7px;
+  left: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+
+}
+
 .cart svg {
   width: 25px;
 }

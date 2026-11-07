@@ -6,6 +6,17 @@ function renderCartContents() {
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }
 
+
+function getCartItemsNumber() {
+  const products = getLocalStorage("so-cart")
+  const counts = products.length;
+
+  document.querySelector(".count-items").textContent = counts
+
+}
+
+
+
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
   <a href="#" class="cart-card__image">
@@ -26,3 +37,5 @@ function cartItemTemplate(item) {
 }
 
 renderCartContents();
+getCartItemsNumber()
+
