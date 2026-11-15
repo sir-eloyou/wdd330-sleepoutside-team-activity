@@ -1,5 +1,5 @@
 
-import { getLocalStorage, setLocalStorage} from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, getCartItemsTotal} from "./utils.mjs";
 
 export default class ProductDetails {
     constructor(productId, dataSource) {
@@ -13,7 +13,7 @@ export default class ProductDetails {
 
         this.product = await this.dataSource.findProductById(this.productId);
         this.renderProductDetails()
-        this.getCartItemsNumber()
+        getCartItemsTotal()
 
         
 
@@ -23,20 +23,14 @@ export default class ProductDetails {
 
     }
 
-    getCartItemsNumber() {
-      const products = getLocalStorage("so-cart")  || []
-      let counts = products.length;
-
-      document.querySelector(".count-items").textContent = counts
-
-    }
 
 
     addProductToCart() {
         let products = getLocalStorage("so-cart") || [];
         products.push(this.product);
         setLocalStorage("so-cart", products);
-        this.getCartItemsNumber()
+        getCartItemsTotal()
+
     }
 
     renderProductDetails() {
@@ -49,7 +43,7 @@ function productDetailsTemplate(product) {
   document.querySelector("h3").textContent = product.NameWithoutBrand;
 
   const productImage = document.getElementById("productImage");
-  productImage.src = product.Image;
+  productImage.src = product.Images.PrimaryLarge;
   productImage.alt = product.NameWithoutBrand;
 
   document.getElementById("productPrice").textContent = product.FinalPrice;
