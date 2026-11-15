@@ -1,4 +1,4 @@
-import { renderListWithTemplate, getLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import { renderListWithTemplate, getLocalStorage } from "./utils.mjs";
 
 
 
@@ -25,7 +25,6 @@ export default class ProductList {
 
     async init() {
         const list = await this.dataSource.getData()
-        await loadHeaderFooter()
         this.renderList(list);
         this.getCartItemsNumber()
 
