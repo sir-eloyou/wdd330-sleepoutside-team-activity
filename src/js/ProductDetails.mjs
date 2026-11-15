@@ -1,5 +1,5 @@
 
-import { getLocalStorage, setLocalStorage, loadHeaderFooter} from "./utils.mjs";
+import { getLocalStorage, setLocalStorage} from "./utils.mjs";
 
 export default class ProductDetails {
     constructor(productId, dataSource) {
@@ -12,7 +12,6 @@ export default class ProductDetails {
     async init() {
 
         this.product = await this.dataSource.findProductById(this.productId);
-        await loadHeaderFooter()
         this.renderProductDetails()
         this.getCartItemsNumber()
 
