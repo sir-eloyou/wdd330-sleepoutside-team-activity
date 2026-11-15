@@ -1,4 +1,4 @@
-import { renderListWithTemplate, getLocalStorage } from "./utils.mjs";
+import { renderListWithTemplate, getLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
 
 
@@ -25,6 +25,7 @@ export default class ProductList {
 
     async init() {
         const list = await this.dataSource.getData()
+        await loadHeaderFooter()
         this.renderList(list);
         this.getCartItemsNumber()
 
@@ -33,7 +34,7 @@ export default class ProductList {
 
     getCartItemsNumber() {
       const products = getLocalStorage("so-cart")  || []
-      const counts = products.length;
+      let counts = products.length;
 
       document.querySelector(".count-items").textContent = counts
 
