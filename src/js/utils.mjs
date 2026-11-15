@@ -66,3 +66,8 @@ export async function loadHeaderFooter() {
   
 }
 
+export function getCartItemsTotal() {
+  const products = getLocalStorage("so-cart")  || []
+  let counts = products.length;
+  document.querySelector(".count-items").textContent = counts
+}
