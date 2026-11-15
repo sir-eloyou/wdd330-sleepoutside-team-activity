@@ -1,4 +1,4 @@
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
@@ -6,16 +6,12 @@ function renderCartContents() {
   document.querySelector(".product-list").innerHTML = htmlItems.join("");
 }
 
-
 function getCartItemsNumber() {
-  const products = getLocalStorage("so-cart") || []
+  const products = getLocalStorage("so-cart") || [];
   const counts = products.length;
 
-  document.querySelector(".count-items").textContent = counts
-
+  document.querySelector(".count-items").textContent = counts;
 }
-
-
 
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
@@ -36,6 +32,7 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
-renderCartContents();
-getCartItemsNumber()
+loadHeaderFooter();
 
+renderCartContents();
+getCartItemsNumber();
