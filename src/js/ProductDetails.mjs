@@ -1,5 +1,5 @@
 
-import { getLocalStorage, setLocalStorage} from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, loadHeaderFooter} from "./utils.mjs";
 
 export default class ProductDetails {
     constructor(productId, dataSource) {
@@ -12,37 +12,32 @@ export default class ProductDetails {
     async init() {
 
         this.product = await this.dataSource.findProductById(this.productId);
+        await loadHeaderFooter()
         this.renderProductDetails()
         this.getCartItemsNumber()
+
+        
 
         document.getElementById("addToCart")
             .addEventListener("click", this.addProductToCart.bind(this));
 
-        document.getElementById("addToCart")
-            .addEventListener("click", this.countProductsFromCart.bind(this))
 
     }
 
     getCartItemsNumber() {
       const products = getLocalStorage("so-cart")  || []
-      const counts = products.length;
+      let counts = products.length;
 
       document.querySelector(".count-items").textContent = counts
 
     }
 
-    countProductsFromCart() {
-        const products = getLocalStorage("so-cart")
-        const counts = products.length;
-
-        document.querySelector(".count-items").textContent = counts
-
-    }
 
     addProductToCart() {
-        const products = getLocalStorage("so-cart") || [];
+        let products = getLocalStorage("so-cart") || [];
         products.push(this.product);
         setLocalStorage("so-cart", products);
+        this.getCartItemsNumber()
     }
 
     renderProductDetails() {

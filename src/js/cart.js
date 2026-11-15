@@ -32,7 +32,7 @@ function cartItemTemplate(item) {
   return newItem;
 }
 
-loadHeaderFooter();
+await loadHeaderFooter();
 
 renderCartContents();
 getCartItemsNumber();
