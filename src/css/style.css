@@ -252,6 +252,19 @@ button {
   grid-column: 3;
 }
 
+.cart-card__close {
+  grid-row: 1;
+  grid-column: 4;
+  background-color: red;
+  display: block;
+  border-radius: 30%;
+  padding: 0.2rem;
+  cursor: pointer;
+}
+
+.cart-card__close:hover {
+  
+}
 
 /* category */
 

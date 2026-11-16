@@ -1,4 +1,4 @@
-import { getLocalStorage, loadHeaderFooter } from "./utils.mjs";
+import { getLocalStorage, loadHeaderFooter, setLocalStorage } from "./utils.mjs";
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
@@ -13,8 +13,35 @@ function getCartItemsNumber() {
   document.querySelector(".count-items").textContent = counts;
 }
 
+function removeItemFromTheCart() {
+  const cart = document.querySelector(".product-list")
+  cart.addEventListener("click", (event) => {
+
+    if (event.target.classList.contains("cart-card__close"))
+    {
+      const item = event.target.closest(".cart-card")
+      const id = item.dataset.id
+
+      let cartItems = getLocalStorage("so-cart");
+
+      cartItems = cartItems.filter(product => product.Id !== id);
+
+      setLocalStorage("so-cart", cartItems)
+
+      item.remove()
+      getCartItemsNumber();
+    }
+
+    
+  })
+
+  
+
+}
+
 function cartItemTemplate(item) {
-  const newItem = `<li class="cart-card divider">
+  const newItem = `<li data-id="${item.Id}" class="cart-card divider">
+  <span class="cart-card__close" >x</span>
   <a href="#" class="cart-card__image">
     <img
       src="${item.Images.PrimaryMedium}"
@@ -34,5 +61,6 @@ function cartItemTemplate(item) {
 
 await loadHeaderFooter();
 
+removeItemFromTheCart()
 renderCartContents();
 getCartItemsNumber();
