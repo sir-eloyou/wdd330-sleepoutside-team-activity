@@ -29,7 +29,8 @@ function removeItemFromTheCart() {
       setLocalStorage("so-cart", cartItems)
 
       item.remove()
-      getCartItemsNumber();
+      renderCartContents()
+      getCartItemsNumber()
     }
 
     
