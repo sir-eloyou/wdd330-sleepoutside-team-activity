@@ -67,11 +67,12 @@ export async function loadHeaderFooter() {
 }
 
 export function getCartItemsTotal() {
-  const products = getLocalStorage("so-cart")  || []
-  let counts = products.length;
-  document.querySelector(".count-items").textContent = counts
-}
+    const cartItems = getLocalStorage("so-cart") || [];
 
+    const total = cartItems.length;
+
+    document.querySelector(".count-items").textContent = total;
+}
 
 
 export function alertMessage(message, scroll = true) {

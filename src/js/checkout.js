@@ -1,5 +1,5 @@
 
-import { loadHeaderFooter, getLocalStorage, alertMessage } from "./utils.mjs";
+import { loadHeaderFooter, getLocalStorage, alertMessage, getCartItemsTotal } from "./utils.mjs";
 import CheckoutProcess from "./checkoutProcess.js";
 import ExternalServices from "./ExternalServices.mjs";
 
@@ -23,14 +23,7 @@ const cartItemsNumber = getLocalStorage("so-cart") || [];
 
 checkoutButton.disabled = cartItemsNumber.length === 0;
 
-const getCartItemsNumber = () => {
-    const cartItems = getLocalStorage("so-cart") || [];
-
-    document.querySelector(".count-items").textContent =
-        cartItems.length;
-};
-
-getCartItemsNumber();
+getCartItemsTotal()
 
 const form = document.querySelector("#payment-form");
 
