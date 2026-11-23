@@ -8,7 +8,7 @@ function convertToJson(res) {
 
 const baseURL = import.meta.env.VITE_SERVER_URL
 
-export default class ProductData {
+export default class ExternalServices {
   
   constructor() {
 
@@ -23,5 +23,27 @@ export default class ProductData {
     const data = await convertToJson(response);
     return data.Result;
     
+  }
+
+  async checkout(order) {
+    const response = await fetch(
+        "https://wdd330-backend-osp8.onrender.com/checkout",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(order)
+        }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        console.error("Server error:", data);
+        throw new Error(JSON.stringify(data));
+    }
+
+    return data;
   }
 }
