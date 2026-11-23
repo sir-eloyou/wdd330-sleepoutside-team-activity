@@ -14,6 +14,7 @@ export default class CheckoutProcess {
 
         this.list = [];
         this.itemTotal = 0;
+        this.itemCount = 0;
         this.shipping = 0;
         this.tax = 0;
         this.orderTotal = 0;
@@ -30,8 +31,18 @@ export default class CheckoutProcess {
     }
 
     calculateItemSubTotal() {
+        // Calculate total quantity
+        this.itemCount = this.list.reduce(
+            (total, item) => total + (Number(item.quantity) || 1),
+            0
+        );
+
+        // Calculate subtotal including quantities
         this.itemTotal = this.list.reduce(
-            (total, item) => total + Number(item.FinalPrice || 0),
+            (total, item) =>
+                total +
+                (Number(item.FinalPrice) || 0) *
+                (Number(item.quantity) || 1),
             0
         );
 
@@ -48,18 +59,17 @@ export default class CheckoutProcess {
         );
 
         if (count) {
-            count.innerText = this.list.length;
+            count.innerText = this.itemCount;
         }
     }
 
     calculateOrderTotal() {
         this.tax = this.itemTotal * 0.06;
 
-        const itemCount = this.list.length;
-
-        this.shipping = itemCount === 0
+        // Shipping based on total item quantity
+        this.shipping = this.itemCount === 0
             ? 0
-            : 10 + (itemCount - 1) * 2;
+            : 10 + (this.itemCount - 1) * 2;
 
         this.orderTotal =
             this.itemTotal + this.tax + this.shipping;
@@ -98,31 +108,24 @@ export default class CheckoutProcess {
             id: item.Id,
             name: item.Name,
             price: Number(item.FinalPrice),
-            quantity: 1
+            quantity: Number(item.quantity) || 1
         }));
     }
 
     async checkout(form) {
         try {
-
-
-            // Get form information
             const order = formDataToJSON(form);
 
-            // Add order information
             order.orderDate = new Date().toISOString();
             order.orderTotal = this.orderTotal.toFixed(2);
             order.tax = this.tax.toFixed(2);
             order.shipping = this.shipping;
             order.items = this.packageItems(this.list);
 
-            // Send order to ExternalServices
             const response = await this.externalServices.checkout(order);
 
-            // Clear shopping cart after successful checkout
             localStorage.removeItem(this.key);
 
-            // Redirect to success page
             window.location.href = "/checkout/success.html";
 
             return response;
