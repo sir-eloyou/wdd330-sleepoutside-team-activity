@@ -71,3 +71,49 @@ export function getCartItemsTotal() {
   let counts = products.length;
   document.querySelector(".count-items").textContent = counts
 }
+
+
+
+export function alertMessage(message, scroll = true) {
+    const main = document.querySelector("main");
+
+    if (!main) return;
+
+    // Remove an existing alert
+    const existingAlert = main.querySelector(".alert");
+    if (existingAlert) {
+        existingAlert.remove();
+    }
+
+    // Create alert container
+    const alert = document.createElement("div");
+    alert.classList.add("alert");
+
+    // Add message
+    const text = document.createElement("p");
+    text.textContent = typeof message === "string"
+        ? message
+        : JSON.stringify(message);
+
+    // Add close button
+    const close = document.createElement("button");
+    close.textContent = "×";
+    close.setAttribute("aria-label", "Close alert");
+
+    alert.append(text, close);
+
+    // Close alert when button is clicked
+    alert.addEventListener("click", (e) => {
+        if (e.target === close) {
+            alert.remove();
+        }
+    });
+
+    // Insert alert at the top of main
+    main.prepend(alert);
+
+    // Scroll to the top
+    if (scroll) {
+        window.scrollTo(0, 0);
+    }
+}

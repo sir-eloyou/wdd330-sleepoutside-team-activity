@@ -1,5 +1,5 @@
 
-import { getLocalStorage } from "./utils.mjs";
+import { getLocalStorage, alertMessage } from "./utils.mjs";
 
 function formDataToJSON(formElement) {
     const formData = new FormData(formElement);
@@ -93,7 +93,6 @@ export default class CheckoutProcess {
         }
     }
 
-    // Convert cart products into the format required by the server
     packageItems(items) {
         return items.map((item) => ({
             id: item.Id,
@@ -103,21 +102,46 @@ export default class CheckoutProcess {
         }));
     }
 
-    // Prepare and submit the customer's order
     async checkout(form) {
-        // Get form information
-        const order = formDataToJSON(form);
+        try {
 
-        // Add order information
-        order.orderDate = new Date().toISOString();
-        order.orderTotal = this.orderTotal.toFixed(2);
-        order.tax = this.tax.toFixed(2);
-        order.shipping = this.shipping;
-        order.items = this.packageItems(this.list);
 
-        // Send order to ExternalServices
-        const response = await this.externalServices.checkout(order);
+            // Get form information
+            const order = formDataToJSON(form);
 
-        return response;
+            // Add order information
+            order.orderDate = new Date().toISOString();
+            order.orderTotal = this.orderTotal.toFixed(2);
+            order.tax = this.tax.toFixed(2);
+            order.shipping = this.shipping;
+            order.items = this.packageItems(this.list);
+
+            // Send order to ExternalServices
+            const response = await this.externalServices.checkout(order);
+
+            // Clear shopping cart after successful checkout
+            localStorage.removeItem(this.key);
+
+            // Redirect to success page
+            window.location.href = "/checkout/success.html";
+
+            return response;
+
+        } catch (err) {
+            console.error("Checkout failed:", err);
+
+            if (err.name === "servicesError") {
+                const message =
+                    err.message?.message ||
+                    err.message?.error ||
+                    "Please check your information and try again.";
+
+                alertMessage(message);
+            } else {
+                alertMessage(
+                    "Something went wrong while processing your order. Please try again."
+                );
+            }
+        }
     }
 }

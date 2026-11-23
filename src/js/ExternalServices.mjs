@@ -1,49 +1,50 @@
-function convertToJson(res) {
+
+async function convertToJson(res) {
+  const jsonResponse = await res.json();
+
   if (res.ok) {
-    return res.json();
+    return jsonResponse;
   } else {
-    throw new Error("Bad Response");
+    throw {
+      name: "servicesError",
+      message: jsonResponse
+    };
   }
 }
 
-const baseURL = import.meta.env.VITE_SERVER_URL
+const baseURL = import.meta.env.VITE_SERVER_URL;
 
 export default class ExternalServices {
-  
+
   constructor() {
 
   }
+
   async getData(category) {
-    const response = await fetch(`${baseURL}products/search/${category} `);
+    const response = await fetch(`${baseURL}products/search/${category}`);
     const data = await convertToJson(response);
     return data.Result;
   }
+
   async findProductById(id) {
     const response = await fetch(`${baseURL}product/${id}`);
     const data = await convertToJson(response);
     return data.Result;
-    
   }
 
   async checkout(order) {
     const response = await fetch(
-        "https://wdd330-backend-osp8.onrender.com/checkout",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(order)
-        }
+      "https://wdd330-backend-osp8.onrender.com/checkout",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(order)
+      }
     );
 
-    const data = await response.json();
-
-    if (!response.ok) {
-        console.error("Server error:", data);
-        throw new Error(JSON.stringify(data));
-    }
-
+    const data = await convertToJson(response);
     return data;
   }
 }
